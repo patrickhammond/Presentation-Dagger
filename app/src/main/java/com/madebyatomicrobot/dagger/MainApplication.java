@@ -1,16 +1,22 @@
 package com.madebyatomicrobot.dagger;
 
 import android.app.Application;
-import android.location.Location;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class MainApplication extends Application {
 
-    private List<Location> allReceivedLocations = new LinkedList<>();
+    private ApplicationComponent component;
 
-    public List<Location> getAllReceivedLocations() {
-        return allReceivedLocations;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        component = DaggerApplicationComponent.builder()
+                .androidModule(new AndroidModule(this))
+                .appModule(new AppModule())
+                .build();
+    }
+
+    public ApplicationComponent getComponent() {
+        return component;
     }
 }

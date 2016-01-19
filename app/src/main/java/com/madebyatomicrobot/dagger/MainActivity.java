@@ -1,6 +1,5 @@
 package com.madebyatomicrobot.dagger;
 
-import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,15 +9,20 @@ import android.support.v7.widget.Toolbar;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    private LocationManager locationManager;
+    @Inject LocationManager locationManager;
+    @Inject List<Location> allLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Because of the way Android creates components we still have to talk to the Application...
+        ((MainApplication) getApplication()).getComponent()
+                .inject(this);
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -50,12 +54,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     private void locationUpdated(Location location) {
-        List<Location> locations = ((MainApplication) getApplication()).getAllReceivedLocations();
-        locations.add(location);
+        allLocations.add(location);
 
         String message = String.format(
-                "Total location updates: %d.\n\nYou are now at: %.2f, %.2f",
-                locations.size(),
+                "Total location updates: %d\n\nYou are now at: %.2f, %.2f",
+                allLocations.size(),
                 location.getLatitude(),
                 location.getLongitude());
         findMainFragment().showMessage(message);

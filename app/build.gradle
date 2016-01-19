@@ -1,4 +1,15 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 'Google Inc.:Google APIs:23'
@@ -22,6 +33,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.android.support:design:23.+'
+
+    compile 'com.google.dagger:dagger:2.0'
+    apt "com.google.dagger:dagger-compiler:2.0"
+    provided 'javax.annotation:jsr250-api:1.0'
 }
