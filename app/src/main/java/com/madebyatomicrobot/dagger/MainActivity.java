@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         allLocations.add(location);
 
         String message = String.format(
-                "Total location updates: %d\n\nYou are now at: %.2f, %.2f",
+                "Total location updates: %d.  You are now at: %.2f, %.2f",
                 allLocations.size(),
                 location.getLatitude(),
                 location.getLongitude());

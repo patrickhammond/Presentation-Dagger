@@ -1,6 +1,7 @@
 package com.madebyatomicrobot.dagger;
 
 import android.app.Application;
+import android.support.annotation.VisibleForTesting;
 
 public class MainApplication extends Application {
 
@@ -18,5 +19,12 @@ public class MainApplication extends Application {
 
     public ApplicationComponent getComponent() {
         return component;
+    }
+
+    // See http://blog.sqisland.com/2015/12/mock-application-in-espresso.html for alternative
+    // approaches if this doesn't jive for you.
+    @VisibleForTesting
+    void setComponent(ApplicationComponent component) {
+        this.component = component;
     }
 }
