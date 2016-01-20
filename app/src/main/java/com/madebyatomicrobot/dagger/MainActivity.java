@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.madebyatomicrobot.dagger.MainActivityFragment.MainActivityFragmentHost;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity
+        implements MainActivityFragmentHost, LocationListener {
 
     @Inject LocationManager locationManager;
     @Inject List<Location> allLocations;
@@ -19,8 +22,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Because of the way Android creates components we still have to talk to the Application...
-        ((MainApplication) getApplication()).getComponent()
-                .inject(this);
+        getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -51,6 +53,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onPause() {
         locationManager.removeUpdates(this);
         super.onPause();
+    }
+
+    @Override
+    public void inject(MainActivityFragment fragment) {
+        getAppComponent().inject(fragment);
+    }
+
+    private ApplicationComponent getAppComponent() {
+        return ((MainApplication) getApplication()).getComponent();
     }
 
     private void locationUpdated(Location location) {

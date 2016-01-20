@@ -10,5 +10,6 @@ import dagger.Component;
 })
 @Singleton
 public interface ApplicationComponent {
-    void inject(MainActivity mainActivity);
+    void inject(MainActivity activity);
+    void inject(MainActivityFragment fragment);
 }
